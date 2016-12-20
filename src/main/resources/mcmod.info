@@ -1,0 +1,16 @@
+[
+{
+  "modid": "travelhut",
+  "name": "Travel Huts",
+  "description": "Generate Travel Huts in th world",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Henry Loenwind"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

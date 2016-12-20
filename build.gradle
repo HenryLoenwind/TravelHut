@@ -1,0 +1,108 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.0.7"
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1.0." + System.getenv('BUILD_NUMBER')
+group= "info.loenwind.travelhut"
+archivesBaseName = "travelhut"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+minecraft {
+    version = "1.10.2-12.18.3.2185"
+    runDir = "run"
+    mappings = "snapshot_20160518"
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "http://mobiusstrip.eu/maven" }
+    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
+    maven { url = "http://maven.tterrag.com" }
+    maven { url = "http://dvs1.progwml6.com/files/maven" } 
+    maven { url = "http://files.minecraftforge.net/maven" }
+    maven { url = "http://maven.cil.li/" }
+    maven { url = "http://maven.ic2.player.to" }
+    maven { url = "http://maven.epoxide.xyz" }
+    ivy {
+        url "http://ae-mod.info/builds"
+        layout "pattern", {
+            artifact "[module]-[revision](-[classifier])(.[ext])"
+        }
+    }
+    mavenLocal()
+}
+
+dependencies {
+    deobfCompile "com.enderio:EnderIO:1.10.2-3.0.1.144_beta"
+}
+
+processResources
+{
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+//    String contents = new File('src/main/java/info/loenwind/travelhut/TravelHutMod.java').getText('UTF-8') 
+//    contents = contents.replaceAll('VERSION = ".*"', 'VERSION = "' + project.version + '"')
+//    new File('src/main/java/info/loenwind/travelhut/TravelHutMod.java').write(contents, 'UTF-8')
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    destinationDir = file './dist'
+    includeEmptyDirs = false
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+jar.doLast { task ->
+    ant.checksum file: task.archivePath
+}
+
+boolean dev = System.getenv("RELEASE") == null || System.getenv("RELEASE").equalsIgnoreCase("false")
+tasks.curseforge.enabled = !dev && System.getenv("CURSEFORGE_KEY") != null
+
+curseforge {
+    if (System.getenv("CURSEFORGE_KEY") != null) {
+        apiKey = System.getenv("CURSEFORGE_KEY")
+    }
+
+    project {
+        id = "00000"
+        changelog = System.getenv('CHANGELOG') == null || System.getenv('CHANGELOG').equals('none') ? "NA" : System.getenv('CHANGELOG')
+        changelogType = 'html'
+        releaseType = "beta"
+        mainArtifact(jar) {
+            displayName = "${archivesBaseName} - ${version}"
+        }
+        relations {
+          requiredLibrary 'enderio'
+        }
+    }
+}
