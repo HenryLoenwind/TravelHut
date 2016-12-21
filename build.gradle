@@ -100,7 +100,7 @@ curseforge {
     }
 
     project {
-        id = "00000"
+        id = "255576"
         changelog = System.getenv('CHANGELOG') == null || System.getenv('CHANGELOG').equals('none') ? "NA" : System.getenv('CHANGELOG')
         changelogType = 'html'
         releaseType = "beta"
@@ -108,7 +108,7 @@ curseforge {
             displayName = "${archivesBaseName} - ${version}"
         }
         relations {
-          requiredLibrary 'enderio'
+          optionalLibrary 'enderio'
         }
     }
 }
