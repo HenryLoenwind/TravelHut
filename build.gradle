@@ -103,12 +103,12 @@ curseforge {
         id = "255576"
         changelog = System.getenv('CHANGELOG') == null || System.getenv('CHANGELOG').equals('none') ? "NA" : System.getenv('CHANGELOG')
         changelogType = 'html'
-        releaseType = "beta"
+        releaseType = "alpha"
         mainArtifact(jar) {
             displayName = "${archivesBaseName} - ${version}"
         }
         relations {
-          optionalLibrary 'enderio'
+          optionalLibrary 'ender-io'
         }
     }
 }
