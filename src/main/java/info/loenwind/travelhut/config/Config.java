@@ -14,12 +14,14 @@ public enum Config {
   // section, defaultValue, description, requiresWorldRestart, requiresGameRestart
 
   enableTravelHuts(Section.SERVER, true, "Enable the generation of travel huts.", false, false),
-  generationDistance(Section.SERVER, 10, "The distance between huts (in chunks).", false, false),
+  generationDistance(Section.SERVER, 20, "The distance between huts (in chunks).", false, false),
   travellingChecksInBetween(Section.SERVER, false,
       "When travelling, check chunks where no huts are generated, too. Enable this after changing the generation distance.", false, false),
-  generateBedrock(Section.SERVER, true, "Should travel hut floors generate as bedrock? If false, they will be obsidian.", false, false),
+  generateBedrock(Section.SERVER, true,
+      "Should travel hut floors generate as bedrock? If false, they will be obsidian. (Note: Bedrock huts and obsidian huts are not compatible with each other.)",
+      false, false),
   chanceFloatingIsland(Section.SERVER, 0.05, "Chance that ocean huts will float instead of being submerged (0.0-1.0.)", false, false),
-  chanceTowers(Section.SERVER, 0.05, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false),;
+  chanceTowers(Section.SERVER, 0.025, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nothing to see beyond this point. End of configuration values.
