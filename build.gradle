@@ -55,16 +55,13 @@ repositories {
 
 dependencies {
     deobfCompile "com.enderio:EnderIO:1.10.2-3.0.1.144_beta"
+    deobfCompile "com.enderio.core:EnderCore:1.10.2-0.4.1.59-beta"
 }
 
 processResources
 {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
-
-//    String contents = new File('src/main/java/info/loenwind/travelhut/TravelHutMod.java').getText('UTF-8') 
-//    contents = contents.replaceAll('VERSION = ".*"', 'VERSION = "' + project.version + '"')
-//    new File('src/main/java/info/loenwind/travelhut/TravelHutMod.java').write(contents, 'UTF-8')
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
@@ -74,6 +71,15 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+compileJava.doFirst {
+    String modFile = 'build/sources/main/java/info/loenwind/travelhut/TravelHutMod.java'
+    File modFileFile = new File(projectDir, modFile) 
+    String contents = modFileFile.getText('UTF-8')
+    // contents = contents.replaceAll('dependencies = ".*", guiFactory', 'dependencies = "' + project.ext.dependencies + '", guiFactory')
+    contents = contents.replaceAll('VERSION = ".*"', 'VERSION = "' + project.version + '"')
+    modFileFile.write(contents, 'UTF-8')
 }
 
 jar {

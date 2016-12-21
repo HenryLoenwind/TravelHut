@@ -2,7 +2,7 @@
 {
   "modid": "travelhut",
   "name": "Travel Huts",
-  "description": "Generate Travel Huts in th world",
+  "description": "Generate Travel Huts in the world",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

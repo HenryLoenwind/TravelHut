@@ -1,0 +1,27 @@
+{
+  "forge_marker": 1,
+  "variants":{
+    "type":{
+      "left":  { "model": "travelhut:portal_left" },
+      "right": { "model": "travelhut:portal_right" }
+    },
+    "facing": {
+      "north": { "y":0 },
+      "east":  { "y":90 },
+      "south": { "y":180 },
+      "west":  { "y":270 }
+    },
+    "bedrock": {
+      true: {
+        "textures": {
+          "texture": "blocks/bedrock"
+        }
+      },
+      false: {
+        "textures": {
+          "texture": "blocks/obsidian"
+        }
+      }
+    }
+  }
+}

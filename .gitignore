@@ -9,3 +9,6 @@ gradle-app.setting
 /.settings/
 /.classpath
 /.project
+/run/
+/bin/
+*.bak
