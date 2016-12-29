@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -44,18 +45,19 @@ public class BlockHutPortal extends Block {
     LEFT,
     RIGHT;
 
+    @SuppressWarnings("null")
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
       return name().toLowerCase(Locale.ENGLISH);
     }
   }
 
-  public static final PropertyEnum<BlockHutPortal.Type> TYPE = PropertyEnum.<BlockHutPortal.Type> create("type", BlockHutPortal.Type.class);
-  public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-  public static final PropertyBool BEDROCK = PropertyBool.create("bedrock");
+  public static final @Nonnull PropertyEnum<BlockHutPortal.Type> TYPE = PropertyEnum.<BlockHutPortal.Type> create("type", BlockHutPortal.Type.class);
+  public static final @Nonnull PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+  public static final @Nonnull PropertyBool BEDROCK = PropertyBool.create("bedrock");
 
   public static BlockHutPortal create() {
-    BlockHutPortal result = new BlockHutPortal("blockHutPortal");
+    BlockHutPortal result = new BlockHutPortal("blockhutportal");
     GameRegistry.register(result);
     return result;
   }
@@ -66,7 +68,7 @@ public class BlockHutPortal extends Block {
   public BlockHutPortal(@Nonnull String name) {
     super(Material.PORTAL);
     this.name = name;
-    setCreativeTab(null);
+    annotationDerp();
     setUnlocalizedName(name);
     setRegistryName(name);
     setHardness(-1.0F);
@@ -83,24 +85,30 @@ public class BlockHutPortal extends Block {
         Config.generateBedrock.getBoolean()));
   }
 
+  @SuppressWarnings("null")
+  private void annotationDerp() {
+    setCreativeTab(null); // is nullable
+  }
+
+  @SuppressWarnings("null")
   @Override
-  public IBlockState getStateFromMeta(int meta) {
+  public @Nonnull IBlockState getStateFromMeta(int meta) {
     return this.getDefaultState().withProperty(TYPE, (meta & 0b1000) == 0 ? BlockHutPortal.Type.LEFT : BlockHutPortal.Type.RIGHT).withProperty(FACING,
         EnumFacing.values()[meta & 0b0111]);
   }
 
   @Override
-  public int getMetaFromState(IBlockState state) {
+  public int getMetaFromState(@Nonnull IBlockState state) {
     return (state.getValue(TYPE) == BlockHutPortal.Type.RIGHT ? 0b1000 : 0) | state.getValue(FACING).ordinal();
   }
 
   @Override
-  protected BlockStateContainer createBlockState() {
+  protected @Nonnull BlockStateContainer createBlockState() {
     return new BlockStateContainer(this, new IProperty[] { TYPE, FACING, BEDROCK });
   }
 
   @Override
-  public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+  public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
     return state.withProperty(BEDROCK, Config.generateBedrock.getBoolean());
   }
 
@@ -111,24 +119,24 @@ public class BlockHutPortal extends Block {
 
   @Override
   @SideOnly(Side.CLIENT)
-  public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+  public void getSubBlocks(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
   }
 
   @SideOnly(Side.CLIENT)
   @Override
-  public BlockRenderLayer getBlockLayer() {
+  public @Nonnull BlockRenderLayer getBlockLayer() {
     return BlockRenderLayer.TRANSLUCENT;
   }
 
   @Override
   @Nullable
-  public AxisAlignedBB getCollisionBoundingBox(IBlockState blockStateIn, World worldIn, BlockPos pos) {
+  public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockStateIn, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
     return NULL_AABB;
   }
 
   @Override
-  public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes,
-      @Nullable Entity entityIn) {
+  public void addCollisionBoxToList(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull AxisAlignedBB entityBox,
+      @Nonnull List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
     for (AxisAlignedBB axisalignedbb : getCollisionBoxList(state)) {
       addCollisionBoxToList(pos, entityBox, collidingBoxes, axisalignedbb);
     }
@@ -169,17 +177,20 @@ public class BlockHutPortal extends Block {
   }
 
   @Override
-  public boolean isFullCube(IBlockState state) {
+  public boolean isFullCube(@Nonnull IBlockState state) {
     return false;
   }
 
   @Override
   @Nullable
-  public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+  public RayTraceResult collisionRayTrace(@Nonnull IBlockState blockStateIn, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Vec3d start,
+      @Nonnull Vec3d end) {
     List<RayTraceResult> list = Lists.<RayTraceResult> newArrayList();
 
-    for (AxisAlignedBB axisalignedbb : getCollisionBoxList(blockState)) {
-      list.add(this.rayTrace(pos, start, end, axisalignedbb));
+    for (AxisAlignedBB axisalignedbb : getCollisionBoxList(blockStateIn)) {
+      if (axisalignedbb != null) {
+        list.add(this.rayTrace(pos, start, end, axisalignedbb));
+      }
     }
 
     RayTraceResult raytraceresult1 = null;
@@ -200,12 +211,12 @@ public class BlockHutPortal extends Block {
   }
 
   @Override
-  public int quantityDropped(Random random) {
+  public int quantityDropped(@Nonnull Random random) {
     return 0;
   }
 
   @Override
-  public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+  public void onEntityCollidedWithBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entityIn) {
     if (!worldIn.isRemote && !entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn instanceof EntityPlayerMP && entityIn.timeUntilPortal == 0
         && new AxisAlignedBB(pos).contract(2d / 16d).intersectsWith(entityIn.getEntityBoundingBox())) {
       TeleportHandler.teleport(worldIn, pos, (EntityPlayerMP) entityIn);
@@ -213,19 +224,18 @@ public class BlockHutPortal extends Block {
   }
 
   @Override
-  @Nullable
-  public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-    return null;
+  public @Nonnull ItemStack getItem(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+    return ItemStack.EMPTY;
   }
 
   @Override
-  public boolean isOpaqueCube(IBlockState state) {
+  public boolean isOpaqueCube(@Nonnull IBlockState state) {
     return false;
   }
 
   @Override
   @SideOnly(Side.CLIENT)
-  public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+  public boolean shouldSideBeRendered(@Nonnull IBlockState state, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
     return blockAccess.getBlockState(pos.offset(side)).getBlock() == this ? false : super.shouldSideBeRendered(state, blockAccess, pos, side);
   }
 

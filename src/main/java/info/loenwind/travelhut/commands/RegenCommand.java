@@ -2,7 +2,8 @@ package info.loenwind.travelhut.commands;
 
 import java.util.Random;
 
-import info.loenwind.travelhut.handlers.EnderIOAdapter;
+import javax.annotation.Nonnull;
+
 import info.loenwind.travelhut.handlers.WorldGenHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandBase;
@@ -26,17 +27,17 @@ public class RegenCommand extends CommandBase {
   }
 
   @Override
-  public String getCommandName() {
+  public @Nonnull String getName() {
     return "regenHut";
   }
 
   @Override
-  public String getCommandUsage(ICommandSender sender) {
-    return "/regenHut";
+  public @Nonnull String getUsage(@Nonnull ICommandSender sender) {
+    return "/regenHut (need to be near a valid spawn location)";
   }
 
   @Override
-  public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+  public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
     if (!(sender instanceof EntityPlayer)) {
       throw new WrongUsageException("Console use is not supported");
     }
@@ -59,11 +60,11 @@ public class RegenCommand extends CommandBase {
     }
 
     Random rand = WorldGenHandler.makeChunkRand(world, chunkX, chunkZ);
-    IBlockState[] states = WorldGenHandler.mkBlockStates(EnderIOAdapter.getGlass(rand));
+    IBlockState[] states = WorldGenHandler.mkBlockStates(WorldGenHandler.getGlass(rand));
     BlockPos startpos = WorldGenHandler.findInitialSpawnLocation(world, chunkX, chunkZ, rand);
     WorldGenHandler.placeHut(world, startpos, states, rand);
 
-    sender.addChatMessage(new TextComponentString("Created hut at " + (startpos.getX() + 8) + "," + (startpos.getY()) + "," + (startpos.getZ() + 8)));
+    sender.sendMessage(new TextComponentString("Created hut at " + (startpos.getX() + 8) + "," + (startpos.getY()) + "," + (startpos.getZ() + 8)));
   }
 
 }

@@ -2,10 +2,14 @@ package info.loenwind.travelhut.handlers;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import info.loenwind.travelhut.TravelHutMod;
 import info.loenwind.travelhut.blocks.BlockHutPortal;
 import info.loenwind.travelhut.config.Config;
 import net.minecraft.block.BlockCarpet;
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStoneSlab;
@@ -22,11 +26,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class WorldGenHandler {
 
-  private static IBlockState sandstone, bedrock, slabs, carpet0, carpet1, carpet2, carpet3, carpet4, sand, lowslabs, obsidian
-
-      , portalLN, portalLE, portalLS, portalLW, portalRN, portalRE, portalRS, portalRW
-
-  ;
+  private static IBlockState sandstone, bedrock, slabs, carpet0, carpet1, carpet2, carpet3, carpet4, sand, lowslabs, obsidian, portalLN, portalLE, portalLS,
+      portalLW, portalRN, portalRE, portalRS, portalRW;
 
   public static void create() {
     sandstone = Blocks.SANDSTONE.getDefaultState();
@@ -64,7 +65,7 @@ public class WorldGenHandler {
     MinecraftForge.EVENT_BUS.register(WorldGenHandler.class);
   }
 
-  public static IBlockState[] mkBlockStates(IBlockState glass) {
+  public static @Nonnull IBlockState[] mkBlockStates(IBlockState glass) {
     return new IBlockState[] { null, glass, null, carpet0, carpet1, carpet2, carpet3, carpet4, sandstone,
         (Config.generateBedrock.getBoolean() ? bedrock : obsidian), slabs, sand, lowslabs,
         // 13
@@ -72,7 +73,7 @@ public class WorldGenHandler {
   }
 
   // [y][z][x]
-  private static final int[][][] data = { { //
+  private static final @Nonnull int[][][] data = { { //
       { 1, 1, 1, 1, 1, 1 }, // 1 glass
       { 1, 1, 1, 1, 1, 1 }, //
       { 1, 1, 1, 1, 1, 1 }, //
@@ -88,14 +89,14 @@ public class WorldGenHandler {
           { 1, 0, 0, 0, 0, 1 }, //
           { 1, 1, 1, 1, 1, 1 }//
       }, { //
-          { 1, 1, 1, 1, 1, 1 }, //
-          { 1, 0, 0, 0, 0, 1 }, //
-          { 1, 0, 0, 0, 0, 1 }, //
-          { 1, 0, 0, 0, 0, 1 }, //
-          { 1, 0, 0, 0, 0, 1 }, //
-          { 1, 1, 1, 1, 1, 1 }//
-      }, { //
           { 1, 1, 13, 17, 1, 1 }, // 13+ portal
+          { 1, 0, 0, 0, 0, 1 }, //
+          { 20, 0, 0, 0, 0, 14 }, //
+          { 16, 0, 0, 0, 0, 18 }, //
+          { 1, 0, 0, 0, 0, 1 }, //
+          { 1, 1, 19, 15, 1, 1 }//
+      }, { //
+          { 1, 1, 13, 17, 1, 1 }, //
           { 1, 0, 0, 0, 0, 1 }, //
           { 20, 0, 0, 0, 0, 14 }, //
           { 16, 0, 0, 0, 0, 18 }, //
@@ -136,7 +137,11 @@ public class WorldGenHandler {
 
   @SubscribeEvent
   public static void pre(PopulateChunkEvent event) {
-    final World world = event.getWorld();
+    final @Nullable World world0 = event.getWorld();
+    if (world0 == null) {
+      throw new NullPointerException("PopulateChunkEvent.getWorld()");
+    }
+    final @Nonnull World world = world0;
     final int chunkX = event.getChunkX();
     final int chunkZ = event.getChunkZ();
 
@@ -146,7 +151,8 @@ public class WorldGenHandler {
 
     Random rand = makeChunkRand(world, chunkX, chunkZ);
 
-    IBlockState[] states = mkBlockStates(EnderIOAdapter.getGlass(rand));
+    @Nonnull
+    IBlockState[] states = mkBlockStates(getGlass(rand));
 
     BlockPos startpos;
     if (event instanceof PopulateChunkEvent.Pre) {
@@ -163,10 +169,15 @@ public class WorldGenHandler {
     }
 
     placeHut(world, startpos, states, rand);
-
   }
 
-  public static void placeHut(final World world, BlockPos startpos, IBlockState[] states, Random rand) {
+  @SuppressWarnings("null")
+  public static IBlockState getGlass(@Nonnull Random rand) {
+    return info.loenwind.travelhut.TravelHutMod.blockHutPortalGlass.getDefaultState().withProperty(BlockColored.COLOR,
+        EnumDyeColor.values()[rand.nextInt(EnumDyeColor.values().length)]);
+  }
+
+  public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull IBlockState[] states, @Nonnull Random rand) {
     for (int pass = 0; pass <= 1; pass++) {
       for (int y = 0; y < data.length; y++) {
         for (int x = 0; x < 6; x++) {
@@ -192,7 +203,7 @@ public class WorldGenHandler {
     }
   }
 
-  public static BlockPos findInitialSpawnLocation(final World world, final int chunkX, final int chunkZ, Random rand) {
+  public static @Nonnull BlockPos findInitialSpawnLocation(final @Nonnull World world, final int chunkX, final int chunkZ, @Nonnull Random rand) {
     BlockPos startpos;
     int i = chunkX * 16 + 8;
     int j = chunkZ * 16 + 8;
@@ -215,7 +226,7 @@ public class WorldGenHandler {
     return startpos;
   }
 
-  public static Random makeChunkRand(final World world, final int chunkX, final int chunkZ) {
+  public static @Nonnull Random makeChunkRand(final @Nonnull World world, final int chunkX, final int chunkZ) {
     Random rand = new Random(world.getSeed());
     long k = rand.nextLong() / 2L * 2L + 1L;
     long l = rand.nextLong() / 2L * 2L + 1L;
@@ -223,11 +234,11 @@ public class WorldGenHandler {
     return rand;
   }
 
-  public static boolean isValidSpawnLocation(final World world, final int chunkX, final int chunkZ) {
+  public static boolean isValidSpawnLocation(final @Nonnull World world, final int chunkX, final int chunkZ) {
     return world.provider.getDimension() == 0 && (chunkX % Config.generationDistance.getInt()) == 0 && (chunkZ % Config.generationDistance.getInt()) == 0;
   }
 
-  private static boolean isFree(World world, BlockPos startpos, boolean inSea) {
+  private static boolean isFree(@Nonnull World world, @Nonnull BlockPos startpos, boolean inSea) {
     for (int x = 5; x <= 10; x++) {
       for (int z = 5; z <= 10; z++) {
         if (!isGroundPossible(world, startpos.add(x, 0, z), inSea)) {
@@ -238,7 +249,7 @@ public class WorldGenHandler {
     return true;
   }
 
-  private static boolean isGroundPossible(World world, BlockPos pos, boolean inSea) {
+  private static boolean isGroundPossible(@Nonnull World world, @Nonnull BlockPos pos, boolean inSea) {
     if (!inSea && world.getBlockState(pos).getMaterial() == Material.WATER) {
       return world.getBlockState(pos.up()).getBlock().isReplaceable(world, pos.up()) && (world.getBlockState(pos.up()).getMaterial() != Material.WATER);
     }

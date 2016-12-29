@@ -21,7 +21,7 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0." + System.getenv('BUILD_NUMBER')
+version = "2.0." + System.getenv('BUILD_NUMBER')
 group= "info.loenwind.travelhut"
 archivesBaseName = "travelhut"
 
@@ -29,9 +29,9 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 minecraft {
-    version = "1.10.2-12.18.3.2185"
+    version = "1.11.2-13.20.0.2201"
     runDir = "run"
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20161227"
 }
 
 repositories {
@@ -54,8 +54,8 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "com.enderio:EnderIO:1.10.2-3.0.1.144_beta"
-    deobfCompile "com.enderio.core:EnderCore:1.10.2-0.4.1.59-beta"
+//    deobfCompile "com.enderio:EnderIO:1.10.2-3.0.1.144_beta"
+//    deobfCompile "com.enderio.core:EnderCore:1.10.2-0.4.1.59-beta"
 }
 
 processResources
@@ -108,7 +108,7 @@ curseforge {
             displayName = "${archivesBaseName} - ${version}"
         }
         relations {
-          optionalLibrary 'ender-io'
+//          optionalLibrary 'ender-io'
         }
     }
 }
