@@ -107,8 +107,8 @@ curseforge {
         mainArtifact(jar) {
             displayName = "${archivesBaseName} - ${version}"
         }
-        relations {
+//        relations {
 //          optionalLibrary 'ender-io'
-        }
+//        }
     }
 }
