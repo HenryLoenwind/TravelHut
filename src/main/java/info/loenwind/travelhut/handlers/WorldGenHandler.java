@@ -197,16 +197,19 @@ public class WorldGenHandler {
     int i = chunkX * 16 + 8;
     int j = chunkZ * 16 + 8;
     startpos = new BlockPos(i, 250, j);
-    while (startpos.getY() > 3 && isFree(world, startpos.down(), false)) {
+    while (startpos.getY() > Config.minSpawnHeight.getInt() && isFree(world, startpos.down(), false)) {
       startpos = startpos.down();
     }
     BlockPos startposSea = startpos;
-    while (startposSea.getY() > 3 && isFree(world, startposSea.down(), true)) {
+    while (startposSea.getY() > Config.minSpawnHeight.getInt() && isFree(world, startposSea.down(), true)) {
       startposSea = startposSea.down();
     }
-    if (startpos.getY() - startposSea.getY() > 6 && rand.nextFloat() > Config.chanceFloatingIsland.getFloat()) {
-      startpos = startposSea;
-    } else if (rand.nextFloat() < Config.chanceTowers.getFloat()) {
+    if (startpos.getY() < Config.minSpawnHeightVoid.getInt() && world.isAirBlock(new BlockPos(startpos.getX(), 0, startpos.getZ()))) {
+      startpos = new BlockPos(startpos.getX(), Config.minSpawnHeightVoid.getInt(), startpos.getZ());
+    } else if (startpos.getY() - startposSea.getY() > 6 && rand.nextFloat() > Config.chanceFloatingIsland.getFloat()) {
+      return startposSea;
+    }
+    if (rand.nextFloat() < Config.chanceTowers.getFloat()) {
       int newy = (rand.nextInt(128) + rand.nextInt(128)) / 2 - 64 + 10;
       if (newy > 10 && startpos.getY() + newy < 250) {
         startpos = startpos.up(newy);

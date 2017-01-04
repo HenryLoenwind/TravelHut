@@ -21,7 +21,9 @@ public enum Config {
       "Should travel hut floors generate as bedrock? If false, they will be obsidian. (Note: Bedrock huts and obsidian huts are not compatible with each other.)",
       false, false),
   chanceFloatingIsland(Section.SERVER, 0.05, "Chance that ocean huts will float instead of being submerged (0.0-1.0.)", false, false),
-  chanceTowers(Section.SERVER, 0.025, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false);
+  chanceTowers(Section.SERVER, 0.025, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false),
+  minSpawnHeight(Section.SERVER, 3, "Huts will not spawn lower than this. Careful with oceans. (3-250).", false, false),
+  minSpawnHeightVoid(Section.SERVER, 64, "Huts will not spawn lower than this when over the void. Void is when there's air at y=0. (3-250).", false, false);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nothing to see beyond this point. End of configuration values.
