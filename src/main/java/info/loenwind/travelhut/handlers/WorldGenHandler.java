@@ -11,6 +11,8 @@ import info.loenwind.travelhut.config.Config;
 import net.minecraft.block.BlockCarpet;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.material.Material;
@@ -27,7 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class WorldGenHandler {
 
   private static IBlockState sandstone, bedrock, slabs, carpet0, carpet1, carpet2, carpet3, carpet4, sand, lowslabs, obsidian, portalLN, portalLE, portalLS,
-      portalLW, portalRN, portalRE, portalRS, portalRW;
+      portalLW, portalRN, portalRE, portalRS, portalRW, dirt, sapling;
 
   public static void create() {
     sandstone = Blocks.SANDSTONE.getDefaultState();
@@ -62,6 +64,10 @@ public class WorldGenHandler {
     carpet3 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.YELLOW);
     carpet4 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.GREEN);
 
+    dirt = Blocks.DIRT.getDefaultState();
+
+    sapling = Blocks.SAPLING.getDefaultState();
+
     MinecraftForge.EVENT_BUS.register(WorldGenHandler.class);
   }
 
@@ -69,7 +75,9 @@ public class WorldGenHandler {
     return new IBlockState[] { null, glass, null, carpet0, carpet1, carpet2, carpet3, carpet4, sandstone,
         (Config.generateBedrock.getBoolean() ? bedrock : obsidian), slabs, sand, lowslabs,
         // 13
-        portalLN, portalLE, portalLS, portalLW, portalRN, portalRE, portalRS, portalRW };
+        portalLN, portalLE, portalLS, portalLW, portalRN, portalRE, portalRS, portalRW,
+        // 21
+        dirt, sapling };
   }
 
   // [y][z][x]
@@ -133,6 +141,58 @@ public class WorldGenHandler {
       }//
   };
 
+  private static final @Nonnull int[][][] tree = { { //
+      { -1, -1, -1, -1, -1, -1 }, //
+      { -1, -1, -1, -1, -1, -1 }, //
+      { -1, -1, -1, -1, -1, -1 }, //
+      { -1, -1, -1, -1, -1, -1 }, //
+      { -1, -1, -1, -1, -1, -1 }, //
+      { -1, -1, -1, -1, -1, -1 }//
+      },
+      { //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      }, { //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      }, { //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      }, { //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      }, { //
+          { -1, -1, -1, -1, -1, -1 }, // 22 sapling
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, 22, 22, -1, -1 }, //
+          { -1, -1, 22, 22, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      }, { //
+          { -1, -1, -1, -1, -1, -1 }, // 21 dirt
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, 21, 21, -1, -1 }, //
+          { -1, -1, 21, 21, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }, //
+          { -1, -1, -1, -1, -1, -1 }//
+      } };
+
   private static int lastChunkX, lastChunkZ, lastStartY;
 
   @SubscribeEvent
@@ -151,6 +211,10 @@ public class WorldGenHandler {
 
     Random rand = makeChunkRand(world, chunkX, chunkZ);
 
+    if (event instanceof PopulateChunkEvent.Post && Config.generateTree.getBoolean()) {
+      randomizeSapling(rand);
+    }
+
     @Nonnull
     IBlockState[] states = mkBlockStates(getGlass(rand));
 
@@ -168,7 +232,10 @@ public class WorldGenHandler {
       return;
     }
 
-    placeHut(world, startpos, states, rand);
+    placeHut(world, startpos, data, states, rand);
+    if (event instanceof PopulateChunkEvent.Post && Config.generateTree.getBoolean()) {
+      placeHut(world, startpos.up(), tree, states, rand);
+    }
   }
 
   @SuppressWarnings("null")
@@ -177,7 +244,16 @@ public class WorldGenHandler {
         EnumDyeColor.values()[rand.nextInt(EnumDyeColor.values().length)]);
   }
 
+  private static void randomizeSapling(@Nonnull Random rand) {
+    sapling = sapling.withProperty(BlockSapling.TYPE, BlockPlanks.EnumType.values()[rand.nextInt(BlockPlanks.EnumType.values().length)]);
+  }
+
   public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull IBlockState[] states, @Nonnull Random rand) {
+    placeHut(world, startpos, data, states, rand);
+  }
+
+  public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull int[][][] data, @Nonnull IBlockState[] states,
+      @Nonnull Random rand) {
     for (int pass = 0; pass <= 1; pass++) {
       for (int y = 0; y < data.length; y++) {
         for (int x = 0; x < 6; x++) {
@@ -185,7 +261,7 @@ public class WorldGenHandler {
             BlockPos pos = startpos.add(x + 5, -y + 5, z + 5);
             if (data[y][z][x] != -1) {
               IBlockState state = states[data[y][z][x]];
-              if (state == null || (pass == 0 && state.getBlock() instanceof BlockCarpet)) {
+              if (state == null || (pass == 0 && (state.getBlock() instanceof BlockCarpet || state.getBlock() instanceof BlockSapling))) {
                 world.setBlockToAir(pos);
               } else if (state.getBlock() instanceof BlockFalling) {
                 while (world.getBlockState(pos).getBlock().isReplaceable(world, pos) && !world.isAirBlock(new BlockPos(pos.getX(), 0, pos.getZ()))) {
