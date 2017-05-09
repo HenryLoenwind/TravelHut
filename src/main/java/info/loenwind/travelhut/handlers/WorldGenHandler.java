@@ -314,7 +314,8 @@ public class WorldGenHandler {
   }
 
   public static boolean isValidSpawnLocation(final @Nonnull World world, final int chunkX, final int chunkZ) {
-    return world.provider.getDimension() == 0 && (chunkX % Config.generationDistance.getInt()) == 0 && (chunkZ % Config.generationDistance.getInt()) == 0;
+    return world.provider.getDimension() == 0 && ((chunkX - Config.generationOffsetX.getInt()) % Config.generationDistance.getInt()) == 0
+        && ((chunkZ - Config.generationOffsetZ.getInt()) % Config.generationDistance.getInt()) == 0;
   }
 
   private static boolean isFree(@Nonnull World world, @Nonnull BlockPos startpos, boolean inSea) {

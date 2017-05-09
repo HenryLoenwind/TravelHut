@@ -15,6 +15,8 @@ public enum Config {
 
   enableTravelHuts(Section.SERVER, true, "Enable the generation of travel huts.", false, false),
   generationDistance(Section.SERVER, 20, "The distance between huts (in chunks).", false, false),
+  generationOffsetX(Section.SERVER, 0, "The X offset from 0,0 (in chunks).", false, false),
+  generationOffsetZ(Section.SERVER, 0, "The Z offset from 0,0 (in chunks).", false, false),
   travellingChecksInBetween(Section.SERVER, false,
       "When travelling, check chunks where no huts are generated, too. Enable this after changing the generation distance.", false, false),
   generateBedrock(Section.SERVER, true,
