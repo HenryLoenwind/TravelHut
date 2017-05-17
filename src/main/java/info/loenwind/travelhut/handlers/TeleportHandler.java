@@ -15,30 +15,58 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TeleportHandler {
 
   private static final ResourceLocation SOUND = new ResourceLocation("entity.endermen.teleport");
 
   public static void teleport(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EntityPlayerMP player) {
+    if (player.timeUntilPortal > 1) {
+      return;
+    } else if (player.timeUntilPortal == 0) {
+      player.timeUntilPortal = 5;
+      return;
+    }
     EnumFacing direction = determineDirection(pos);
     if (direction == null) {
       return;
     }
+    player.timeUntilPortal = 10;
     BlockPos target = getTarget(worldIn, pos, direction);
     if (target == null) {
       BlockPos expectedTarget = pos.offset(direction, Config.generationDistance.getInt() * 16 - 4);
       player.sendMessage(new TextComponentString("No target found at " + expectedTarget.getX() + ", " + expectedTarget.getZ()));
-      player.timeUntilPortal = 10;
-      return;
+    } else {
+      if (Config.asyncTeleport.getBoolean()) {
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new TeleportRunnable(player, pos, target));
+      } else {
+        (new TeleportRunnable(player, pos, target)).run();
+      }
     }
-    player.connection.setPlayerLocation(target.getX() + 0.5, target.getY() + 1.1, target.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
-    player.fallDistance = 0;
-    player.timeUntilPortal = 10;
-    final SoundEvent sound = SoundEvent.REGISTRY.getObject(SOUND);
-    if (sound != null) {
-      worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.BLOCKS, 1, 1);
-      worldIn.playSound(null, target.getX(), target.getY(), target.getZ(), sound, SoundCategory.BLOCKS, 1, 1);
+  }
+
+  private static final class TeleportRunnable implements Runnable {
+    private final @Nonnull EntityPlayerMP player;
+    private final @Nonnull BlockPos pos, target;
+
+    TeleportRunnable(@Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull BlockPos target) {
+      this.player = player;
+      this.pos = pos;
+      this.target = target;
+    }
+
+    @Override
+    public void run() {
+      player.fallDistance = 0;
+      player.timeUntilPortal = 10;
+      player.connection.setPlayerLocation(target.getX() + 0.5, target.getY() + 1.1, target.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+      final SoundEvent sound = SoundEvent.REGISTRY.getObject(SOUND);
+      if (sound != null) {
+        player.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.BLOCKS, 1, 1);
+        player.world.playSound(null, target.getX(), target.getY(), target.getZ(), sound, SoundCategory.BLOCKS, 1, 1);
+      }
+
     }
   }
 

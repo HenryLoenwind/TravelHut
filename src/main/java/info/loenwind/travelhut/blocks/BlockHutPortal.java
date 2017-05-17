@@ -131,7 +131,7 @@ public class BlockHutPortal extends Block {
   @Override
   @Nullable
   public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockStateIn, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-    return NULL_AABB;
+    return getCollisionBoxList(blockStateIn).get(0);
   }
 
   @Override
@@ -217,7 +217,7 @@ public class BlockHutPortal extends Block {
 
   @Override
   public void onEntityCollidedWithBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entityIn) {
-    if (!worldIn.isRemote && !entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn instanceof EntityPlayerMP && entityIn.timeUntilPortal == 0
+    if (!worldIn.isRemote && !entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn instanceof EntityPlayerMP
         && new AxisAlignedBB(pos).contract(2d / 16d).intersectsWith(entityIn.getEntityBoundingBox())) {
       TeleportHandler.teleport(worldIn, pos, (EntityPlayerMP) entityIn);
     }

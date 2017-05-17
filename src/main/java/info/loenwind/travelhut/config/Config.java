@@ -26,7 +26,8 @@ public enum Config {
   chanceTowers(Section.SERVER, 0.025, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false),
   minSpawnHeight(Section.SERVER, 3, "Huts will not spawn lower than this. Careful with oceans. (3-250).", false, false),
   minSpawnHeightVoid(Section.SERVER, 64, "Huts will not spawn lower than this when over the void. Void is when there's air at y=0. (3-250).", false, false),
-  generateTree(Section.SERVER, false, "Should a tree be added to the huts? Only makes sense in void worlds.", false, false);
+  generateTree(Section.SERVER, false, "Should a tree be added to the huts? Only makes sense in void worlds.", false, false),
+  asyncTeleport(Section.SERVER, true, "Should the teleporting be delayed to the next tick or executed instantly.", false, false);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nothing to see beyond this point. End of configuration values.
