@@ -121,6 +121,11 @@ public class BlockHutPortal extends Block {
   }
 
   @Override
+  public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
+    return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+  }
+
+  @Override
   @Nullable
   public AxisAlignedBB getCollisionBoundingBox(IBlockState blockStateIn, World worldIn, BlockPos pos) {
     return NULL_AABB;

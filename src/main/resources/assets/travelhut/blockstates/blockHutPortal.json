@@ -2,8 +2,22 @@
   "forge_marker": 1,
   "variants":{
     "type":{
-      "left":  { "model": "travelhut:portal_left" },
-      "right": { "model": "travelhut:portal_right" }
+      "left":  {
+        "model": "forge:multi-layer",
+        "custom": {
+          "base": "travelhut:blockhutportal#portal_frame_left",
+          "Solid": "travelhut:blockhutportal#portal_frame_left",
+          "Translucent": "travelhut:blockhutportal#portal_left"
+        }
+      },
+      "right": {
+        "model": "forge:multi-layer",
+        "custom": {
+          "base": "travelhut:blockhutportal#portal_frame_right",
+          "Solid": "travelhut:blockhutportal#portal_frame_right",
+          "Translucent": "travelhut:blockhutportal#portal_right"
+        }
+      }
     },
     "facing": {
       "north": { "y":0 },
@@ -22,6 +36,18 @@
           "texture": "blocks/obsidian"
         }
       }
-    }
+    },
+    "portal_left": [{
+      "model": "travelhut:portal_left"
+    }],
+    "portal_frame_left": [{
+      "model": "travelhut:portal_frame_left"
+    }],
+    "portal_right": [{
+      "model": "travelhut:portal_right"
+    }],
+    "portal_frame_right": [{
+      "model": "travelhut:portal_frame_right"
+    }]
   }
 }
