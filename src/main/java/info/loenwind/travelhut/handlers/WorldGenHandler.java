@@ -244,6 +244,7 @@ public class WorldGenHandler {
         EnumDyeColor.values()[rand.nextInt(EnumDyeColor.values().length)]);
   }
 
+  @SuppressWarnings("null")
   private static void randomizeSapling(@Nonnull Random rand) {
     sapling = sapling.withProperty(BlockSapling.TYPE, BlockPlanks.EnumType.values()[rand.nextInt(BlockPlanks.EnumType.values().length)]);
   }
@@ -252,15 +253,15 @@ public class WorldGenHandler {
     placeHut(world, startpos, data, states, rand);
   }
 
-  public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull int[][][] data, @Nonnull IBlockState[] states,
+  public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull int[][][] dataIn, @Nonnull IBlockState[] states,
       @Nonnull Random rand) {
     for (int pass = 0; pass <= 1; pass++) {
-      for (int y = 0; y < data.length; y++) {
+      for (int y = 0; y < dataIn.length; y++) {
         for (int x = 0; x < 6; x++) {
           for (int z = 0; z < 6; z++) {
             BlockPos pos = startpos.add(x + 5, -y + 5, z + 5);
-            if (data[y][z][x] != -1) {
-              IBlockState state = states[data[y][z][x]];
+            if (dataIn[y][z][x] != -1) {
+              IBlockState state = states[dataIn[y][z][x]];
               if (state == null || (pass == 0 && (state.getBlock() instanceof BlockCarpet || state.getBlock() instanceof BlockSapling))) {
                 world.setBlockToAir(pos);
               } else if (state.getBlock() instanceof BlockFalling) {

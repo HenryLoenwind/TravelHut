@@ -61,6 +61,7 @@ public class TeleportHandler {
       player.fallDistance = 0;
       player.timeUntilPortal = 10;
       player.connection.setPlayerLocation(target.getX() + 0.5, target.getY() + 1.1, target.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+      player.world.updateEntityWithOptionalForce(player, false);
       final SoundEvent sound = SoundEvent.REGISTRY.getObject(SOUND);
       if (sound != null) {
         player.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), sound, SoundCategory.BLOCKS, 1, 1);
