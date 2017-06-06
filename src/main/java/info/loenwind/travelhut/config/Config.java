@@ -27,7 +27,10 @@ public enum Config {
   minSpawnHeight(Section.SERVER, 3, "Huts will not spawn lower than this. Careful with oceans. (3-250).", false, false),
   minSpawnHeightVoid(Section.SERVER, 64, "Huts will not spawn lower than this when over the void. Void is when there's air at y=0. (3-250).", false, false),
   generateTree(Section.SERVER, false, "Should a tree be added to the huts? Only makes sense in void worlds.", false, false),
-  asyncTeleport(Section.SERVER, true, "Should the teleporting be delayed to the next tick or executed instantly.", false, false);
+  movingTeleport(Section.SERVER, true, "Should the teleporting be executed by moving the player smoothly instead of instantly.", false, false),
+  movingTime(Section.SERVER, 20 * 5, "When movingTeleport is on: The time a travel takes (in ticks).", false, false),
+  movingArc(Section.SERVER, 30.0, "When movingTeleport is on: The height of the travel arc (in meters).", false, false),
+  asyncTeleport(Section.SERVER, true, "When movingTeleport is off: Should the teleporting be delayed to the next tick or executed instantly.", false, false);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nothing to see beyond this point. End of configuration values.
