@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
@@ -21,41 +21,25 @@ plugins {
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "2.0." + System.getenv('BUILD_NUMBER')
+version = "3.0." + System.getenv('BUILD_NUMBER')
 group= "info.loenwind.travelhut"
 archivesBaseName = "travelhut"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
-    version = "1.11.2-13.20.0.2201"
+    version = "1.12.2-14.23.1.2594"
     runDir = "run"
-    mappings = "snapshot_20161227"
+    mappings = "snapshot_20171212"
 }
 
 repositories {
     mavenCentral()
-    maven { url = "http://mobiusstrip.eu/maven" }
-    maven { url = "http://dl.tsr.me/artifactory/libs-release-local" }
-    maven { url = "http://maven.tterrag.com" }
-    maven { url = "http://dvs1.progwml6.com/files/maven" } 
-    maven { url = "http://files.minecraftforge.net/maven" }
-    maven { url = "http://maven.cil.li/" }
-    maven { url = "http://maven.ic2.player.to" }
-    maven { url = "http://maven.epoxide.xyz" }
-    ivy {
-        url "http://ae-mod.info/builds"
-        layout "pattern", {
-            artifact "[module]-[revision](-[classifier])(.[ext])"
-        }
-    }
     mavenLocal()
 }
 
 dependencies {
-//    deobfCompile "com.enderio:EnderIO:1.10.2-3.0.1.144_beta"
-//    deobfCompile "com.enderio.core:EnderCore:1.10.2-0.4.1.59-beta"
 }
 
 processResources
@@ -107,8 +91,5 @@ curseforge {
         mainArtifact(jar) {
             displayName = "${archivesBaseName} - ${version}"
         }
-//        relations {
-//          optionalLibrary 'ender-io'
-//        }
     }
 }

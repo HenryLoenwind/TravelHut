@@ -23,7 +23,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -35,7 +34,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,7 +56,6 @@ public class BlockHutPortal extends Block {
 
   public static BlockHutPortal create() {
     BlockHutPortal result = new BlockHutPortal("blockhutportal");
-    GameRegistry.register(result);
     return result;
   }
 
@@ -118,8 +115,7 @@ public class BlockHutPortal extends Block {
   }
 
   @Override
-  @SideOnly(Side.CLIENT)
-  public void getSubBlocks(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+  public void getSubBlocks(@Nonnull CreativeTabs itemIn, @Nonnull NonNullList<ItemStack> items) {
   }
 
   @SideOnly(Side.CLIENT)
@@ -223,7 +219,7 @@ public class BlockHutPortal extends Block {
   @Override
   public void onEntityCollidedWithBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entityIn) {
     if (!worldIn.isRemote && !entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn instanceof EntityPlayerMP
-        && new AxisAlignedBB(pos).contract(2d / 16d).intersectsWith(entityIn.getEntityBoundingBox())) {
+        && new AxisAlignedBB(pos).shrink(2d / 16d).intersects(entityIn.getEntityBoundingBox())) {
       TeleportHandler.teleport(worldIn, pos, (EntityPlayerMP) entityIn);
     }
   }

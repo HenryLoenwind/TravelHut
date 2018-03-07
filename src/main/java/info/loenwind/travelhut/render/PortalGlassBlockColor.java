@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 
 import info.loenwind.travelhut.TravelHutMod;
 import net.minecraft.block.BlockColored;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -22,7 +23,7 @@ public class PortalGlassBlockColor implements IBlockColor {
 
   @Override
   public int colorMultiplier(@Nonnull IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
-    return state.getValue(BlockColored.COLOR).getMapColor().colorValue;
+    return MapColor.getBlockColor(state.getValue(BlockColored.COLOR)).colorValue;
   }
 
 }

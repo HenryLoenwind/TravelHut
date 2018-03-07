@@ -11,6 +11,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class PortalGlassStateMapper extends StateMapperBase {
 
+  @SuppressWarnings("null")
   public static void create() {
     PortalGlassStateMapper mapper = new PortalGlassStateMapper();
     ModelLoader.setCustomStateMapper(TravelHutMod.blockHutPortalGlass, mapper);
