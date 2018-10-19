@@ -5,21 +5,19 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedTransferQueue;
 
-import net.minecraftforge.common.MinecraftForge;
+import info.loenwind.travelhut.TravelHutMod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
+@EventBusSubscriber(modid = TravelHutMod.MODID)
 public class TickHandler {
 
   static final Queue<ITicknQueue> queue = new LinkedTransferQueue<>();
 
   private TickHandler() {
-  }
-
-  public static void create() {
-    MinecraftForge.EVENT_BUS.register(TickHandler.class);
   }
 
   public static void enqueue(ITicknQueue handler) {

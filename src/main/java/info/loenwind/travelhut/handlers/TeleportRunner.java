@@ -10,6 +10,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 
 final class TeleportRunner implements ITicknQueue {
+
   private final @Nonnull EntityPlayerMP player;
   private final @Nonnull BlockPos pos, target;
   private static final ResourceLocation SOUND = new ResourceLocation("entity.endermen.teleport");

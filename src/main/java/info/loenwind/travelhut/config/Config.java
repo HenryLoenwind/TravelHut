@@ -22,15 +22,17 @@ public enum Config {
   generateBedrock(Section.SERVER, true,
       "Should travel hut floors generate as bedrock? If false, they will be obsidian. (Note: Bedrock huts and obsidian huts are not compatible with each other.)",
       false, false),
-  chanceFloatingIsland(Section.SERVER, 0.05, "Chance that ocean huts will float instead of being submerged (0.0-1.0.)", false, false),
+  chanceFloatingIsland(Section.SERVER, 0.05, "Chance that ocean huts will float instead of being submerged (0.0-1.0).", false, false),
   chanceTowers(Section.SERVER, 0.025, "Chance that huts will generate as a tower instead of being on the floor (0.0-1.0).", false, false),
   minSpawnHeight(Section.SERVER, 3, "Huts will not spawn lower than this. Careful with oceans. (3-250).", false, false),
   minSpawnHeightVoid(Section.SERVER, 64, "Huts will not spawn lower than this when over the void. Void is when there's air at y=0. (3-250).", false, false),
-  generateTree(Section.SERVER, false, "Should a tree be added to the huts? Only makes sense in void worlds.", false, false),
+  generateTree(Section.SERVER, false, "Should saplings on dirt be added to the huts? Only makes sense in void worlds.", false, false),
   movingTeleport(Section.SERVER, true, "Should the teleporting be executed by moving the player smoothly instead of instantly.", false, false),
   movingTime(Section.SERVER, 20 * 5, "When movingTeleport is on: The time a travel takes (in ticks).", false, false),
   movingArc(Section.SERVER, 30.0, "When movingTeleport is on: The height of the travel arc (in meters).", false, false),
-  asyncTeleport(Section.SERVER, true, "When movingTeleport is off: Should the teleporting be delayed to the next tick or executed instantly.", false, false);
+  asyncTeleport(Section.SERVER, true, "When movingTeleport is off: Should the teleporting be delayed to the next tick or executed instantly.", false, false),
+  holyGlass(Section.SERVER, true, "Should players be able to pass through Portal Glass unhindered? When enabled, players will also not be able to hit the "
+      + "glass, but it will still be easily breakable (e.g. explosions) and can be manipulated by pistions etc.", false, false);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Nothing to see beyond this point. End of configuration values.

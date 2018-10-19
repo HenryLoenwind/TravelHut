@@ -7,14 +7,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+@EventBusSubscriber(modid = TravelHutMod.MODID, value = Side.CLIENT)
 public class PortalGlassStateMapper extends StateMapperBase {
 
   @SuppressWarnings("null")
-  public static void create() {
-    PortalGlassStateMapper mapper = new PortalGlassStateMapper();
-    ModelLoader.setCustomStateMapper(TravelHutMod.blockHutPortalGlass, mapper);
+  @SubscribeEvent
+  public static void onModelRegistryEvent(ModelRegistryEvent event) {
+    ModelLoader.setCustomStateMapper(TravelHutMod.blockHutPortalGlass, new PortalGlassStateMapper());
   }
 
   @Override

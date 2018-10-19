@@ -14,7 +14,7 @@ import net.minecraft.world.GameType;
 
 public class MoveRunner implements ITicknQueue {
 
-  private static final ResourceLocation SOUND = new ResourceLocation("entity.endermen.teleport");
+  private static final @Nonnull ResourceLocation SOUND = new ResourceLocation("entity.endermen.teleport");
   private final @Nonnull EntityPlayerMP player;
   private double x0, y0, z0, x1, y1, z1;
   private int tick = 0;

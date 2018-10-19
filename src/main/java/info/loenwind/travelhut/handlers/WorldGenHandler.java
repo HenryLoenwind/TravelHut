@@ -22,62 +22,44 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@EventBusSubscriber(modid = TravelHutMod.MODID)
 public class WorldGenHandler {
 
-  private static IBlockState sandstone, bedrock, slabs, carpet0, carpet1, carpet2, carpet3, carpet4, sand, lowslabs, obsidian, portalLN, portalLE, portalLS,
-      portalLW, portalRN, portalRE, portalRS, portalRW, dirt, sapling;
-
-  public static void create() {
-    sandstone = Blocks.SANDSTONE.getDefaultState();
-    bedrock = Blocks.BEDROCK.getDefaultState();
-    slabs = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.SAND).withProperty(BlockSlab.HALF,
-        BlockSlab.EnumBlockHalf.TOP);
-    lowslabs = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.SAND).withProperty(BlockSlab.HALF,
-        BlockSlab.EnumBlockHalf.BOTTOM);
-    sand = Blocks.SAND.getDefaultState();
-    obsidian = Blocks.OBSIDIAN.getDefaultState();
-
-    portalLN = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.NORTH);
-    portalLE = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.EAST);
-    portalLS = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.SOUTH);
-    portalLW = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.WEST);
-    portalRN = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.NORTH);
-    portalRE = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.EAST);
-    portalRS = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.SOUTH);
-    portalRW = TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
-        EnumFacing.WEST);
-
-    carpet0 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.SILVER);
-    carpet1 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.BLUE);
-    carpet2 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.RED);
-    carpet3 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.YELLOW);
-    carpet4 = Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.GREEN);
-
-    dirt = Blocks.DIRT.getDefaultState();
-
-    sapling = Blocks.SAPLING.getDefaultState();
-
-    MinecraftForge.EVENT_BUS.register(WorldGenHandler.class);
-  }
-
-  public static @Nonnull IBlockState[] mkBlockStates(IBlockState glass) {
-    return new IBlockState[] { null, glass, null, carpet0, carpet1, carpet2, carpet3, carpet4, sandstone,
-        (Config.generateBedrock.getBoolean() ? bedrock : obsidian), slabs, sand, lowslabs,
+  public static @Nonnull IBlockState[] mkBlockStates(IBlockState glass, IBlockState sapling) {
+    return new IBlockState[] { null, glass, null, Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.SILVER),
+        Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.BLUE),
+        Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.RED),
+        Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.YELLOW),
+        Blocks.CARPET.getDefaultState().withProperty(net.minecraft.block.BlockCarpet.COLOR, EnumDyeColor.GREEN), Blocks.SANDSTONE.getDefaultState(),
+        (Config.generateBedrock.getBoolean() ? Blocks.BEDROCK.getDefaultState() : Blocks.OBSIDIAN.getDefaultState()),
+        Blocks.STONE_SLAB
+            .getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.SAND).withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP),
+        Blocks.SAND.getDefaultState(),
+        Blocks.STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.SAND).withProperty(BlockSlab.HALF,
+            BlockSlab.EnumBlockHalf.BOTTOM),
         // 13
-        portalLN, portalLE, portalLS, portalLW, portalRN, portalRE, portalRS, portalRW,
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.NORTH),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.EAST),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.SOUTH),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.LEFT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.WEST),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.NORTH),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.EAST),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.SOUTH),
+        TravelHutMod.blockHutPortal.getDefaultState().withProperty(BlockHutPortal.TYPE, BlockHutPortal.Type.RIGHT).withProperty(BlockHutPortal.FACING,
+            EnumFacing.WEST),
         // 21
-        dirt, sapling };
+        Blocks.DIRT.getDefaultState(), sapling != null ? sapling : Blocks.SAPLING.getDefaultState() };
   }
 
   // [y][z][x]
@@ -88,8 +70,7 @@ public class WorldGenHandler {
       { 1, 1, 1, 1, 1, 1 }, //
       { 1, 1, 1, 1, 1, 1 }, //
       { 1, 1, 1, 1, 1, 1 }//
-      },
-      { //
+      }, { //
           { 1, 1, 1, 1, 1, 1 }, //
           { 1, 0, 0, 0, 0, 1 }, // 0 air
           { 1, 0, 0, 0, 0, 1 }, //
@@ -148,8 +129,7 @@ public class WorldGenHandler {
       { -1, -1, -1, -1, -1, -1 }, //
       { -1, -1, -1, -1, -1, -1 }, //
       { -1, -1, -1, -1, -1, -1 }//
-      },
-      { //
+      }, { //
           { -1, -1, -1, -1, -1, -1 }, //
           { -1, -1, -1, -1, -1, -1 }, //
           { -1, -1, -1, -1, -1, -1 }, //
@@ -211,12 +191,9 @@ public class WorldGenHandler {
 
     Random rand = makeChunkRand(world, chunkX, chunkZ);
 
-    if (event instanceof PopulateChunkEvent.Post && Config.generateTree.getBoolean()) {
-      randomizeSapling(rand);
-    }
-
     @Nonnull
-    IBlockState[] states = mkBlockStates(getGlass(rand));
+    IBlockState[] states = mkBlockStates(getGlass(rand),
+        event instanceof PopulateChunkEvent.Post && Config.generateTree.getBoolean() ? randomizeSapling(rand) : null);
 
     BlockPos startpos;
     if (event instanceof PopulateChunkEvent.Pre) {
@@ -245,8 +222,8 @@ public class WorldGenHandler {
   }
 
   @SuppressWarnings("null")
-  private static void randomizeSapling(@Nonnull Random rand) {
-    sapling = sapling.withProperty(BlockSapling.TYPE, BlockPlanks.EnumType.values()[rand.nextInt(BlockPlanks.EnumType.values().length)]);
+  private static IBlockState randomizeSapling(@Nonnull Random rand) {
+    return Blocks.SAPLING.getDefaultState().withProperty(BlockSapling.TYPE, BlockPlanks.EnumType.values()[rand.nextInt(BlockPlanks.EnumType.values().length)]);
   }
 
   public static void placeHut(final @Nonnull World world, @Nonnull BlockPos startpos, @Nonnull IBlockState[] states, @Nonnull Random rand) {

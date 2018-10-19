@@ -1,9 +1,12 @@
 package info.loenwind.travelhut.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import info.loenwind.travelhut.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.SoundType;
@@ -12,11 +15,14 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -106,6 +112,19 @@ public class BlockHutPortalGlass extends Block {
       return false;
     }
     return super.shouldSideBeRendered(blockStateIn, blockAccess, pos, side);
+  }
+
+  @Override
+  public void addCollisionBoxToList(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull AxisAlignedBB entityBox,
+      @Nonnull List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+    if (!(entityIn instanceof EntityPlayer) || !Config.holyGlass.getBoolean()) {
+      super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+    }
+  }
+
+  @Override
+  public boolean canCollideCheck(@Nonnull IBlockState state, boolean hitIfLiquid) {
+    return !Config.holyGlass.getBoolean();
   }
 
 }

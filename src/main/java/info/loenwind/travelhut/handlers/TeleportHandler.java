@@ -30,7 +30,7 @@ public class TeleportHandler {
     BlockPos target = getTarget(worldIn, pos, direction);
     if (target == null) {
       BlockPos expectedTarget = pos.offset(direction, Config.generationDistance.getInt() * 16 - 4);
-      player.sendMessage(new TextComponentString("No target found at " + expectedTarget.getX() + ", " + expectedTarget.getZ()));
+      player.sendStatusMessage(new TextComponentString("No target found at " + expectedTarget.getX() + ", " + expectedTarget.getZ()), true);
     } else {
       if (Config.movingTeleport.getBoolean() && !player.isSneaking()) {
         MoveRunner.enqueue(player, pos, target);

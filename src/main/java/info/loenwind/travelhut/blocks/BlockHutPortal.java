@@ -90,7 +90,7 @@ public class BlockHutPortal extends Block {
   @SuppressWarnings("null")
   @Override
   public @Nonnull IBlockState getStateFromMeta(int meta) {
-    return this.getDefaultState().withProperty(TYPE, (meta & 0b1000) == 0 ? BlockHutPortal.Type.LEFT : BlockHutPortal.Type.RIGHT).withProperty(FACING,
+    return getDefaultState().withProperty(TYPE, (meta & 0b1000) == 0 ? BlockHutPortal.Type.LEFT : BlockHutPortal.Type.RIGHT).withProperty(FACING,
         EnumFacing.values()[meta & 0b0111]);
   }
 

@@ -33,13 +33,13 @@ public class RegenCommand extends CommandBase {
 
   @Override
   public @Nonnull String getUsage(@Nonnull ICommandSender sender) {
-    return "/regenHut (need to be near a valid spawn location)";
+    return "travelhut.command.usage";
   }
 
   @Override
   public void execute(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) throws CommandException {
     if (!(sender instanceof EntityPlayer)) {
-      throw new WrongUsageException("Console use is not supported");
+      throw new WrongUsageException("travelhut.command.error.console");
     }
 
     World world = sender.getEntityWorld();
@@ -53,14 +53,14 @@ public class RegenCommand extends CommandBase {
         if (!WorldGenHandler.isValidSpawnLocation(world, chunkX, chunkZ)) {
           chunkX += 1;
           if (!WorldGenHandler.isValidSpawnLocation(world, chunkX, chunkZ)) {
-            throw new WrongUsageException("Not near a valid location");
+            throw new WrongUsageException("travelhut.command.error.location");
           }
         }
       }
     }
 
     Random rand = WorldGenHandler.makeChunkRand(world, chunkX, chunkZ);
-    IBlockState[] states = WorldGenHandler.mkBlockStates(WorldGenHandler.getGlass(rand));
+    IBlockState[] states = WorldGenHandler.mkBlockStates(WorldGenHandler.getGlass(rand), null);
     BlockPos startpos = WorldGenHandler.findInitialSpawnLocation(world, chunkX, chunkZ, rand);
     WorldGenHandler.placeHut(world, startpos, states, rand);
 

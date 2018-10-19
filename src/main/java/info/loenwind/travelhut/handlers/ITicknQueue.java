@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface ITicknQueue {
 
-  void logout(EntityPlayer player2);
+  void logout(EntityPlayer player);
 
   ITicknQueue tick();
 
