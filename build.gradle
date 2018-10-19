@@ -1,9 +1,14 @@
 buildscript {
     repositories {
-        jcenter()
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
+        }
+        maven  {
+            url "http://repo1.maven.org/maven2"
         }
         maven {
             name = "sonatype"
